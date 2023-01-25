@@ -26,7 +26,8 @@ const companySchema = mongoose.Schema({
     lowercase: true,
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    type: mongoose.Schema.Types.ObjectId, ref: 'User',
+    required: true
   }
 },
   {

@@ -12,7 +12,8 @@ const freelanceSchema = mongoose.Schema({
     min: 0,
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    type: mongoose.Schema.Types.ObjectId, ref: 'User',
+    required: true
   },
   skills: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'Skill' }
