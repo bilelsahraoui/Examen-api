@@ -34,6 +34,15 @@ const missionSchema = mongoose.Schema({
   skills: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'Skill' }
   ],
+  freelancers: [
+    { 
+      freelance: {type: mongoose.Schema.Types.ObjectId, ref: 'Freelance'},
+      isAccepted: {
+        type: Boolean,
+        default: false
+      }
+    },
+  ],
   company: {
     type: mongoose.Schema.Types.ObjectId, ref: 'Company'
   }

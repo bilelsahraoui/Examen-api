@@ -1,11 +1,12 @@
 const User = require('../models/user.model');
 
-function verifyIsFreelance(req, res, next) {
-  const verifyUser = User.findById(req.userToken.id).populate('freelance');
-  if(verifyUser.freelance !== null){
+async function verifyIsFreelance (req, res, next) {
+  const verifyUser = await User.findById(req.userToken.id).populate('freelance');
+  if(verifyUser.freelance){
     next();
+  }else{
+    return res.status(401).send({ message: "You must be a Freelance" });
   }
-  return res.status(401).send({ message: "You must be a Freelancer" });
 }
 
 module.exports = verifyIsFreelance;

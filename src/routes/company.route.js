@@ -6,7 +6,7 @@ const verifyToken = require('../middlewares/verifyToken');
 const verifyCompanyRegistered = require('../middlewares/verifyCompanyRegistered');
 
 router.post('/register', verifyToken, verifyCompanyRegistered, companyController.register);
-router.get('/', companyController.getAllCompanies);
-router.get('/:id', companyController.getCompanyById);
+router.get('/', verifyToken, companyController.getAllCompanies);
+router.get('/:id', verifyToken, companyController.getCompanyById);
 
 module.exports = router;

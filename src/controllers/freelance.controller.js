@@ -3,8 +3,8 @@ const User = require("../models/user.model");
 const Skill = require("../models/skill.model");
 
 exports.register = async (req, res) => {
-    Freelance.find({ user: req.userToken.id }).then(freelance => {
-        if(freelance){
+    await Freelance.find({ user: req.userToken.id }).then(freelance => {
+        if(freelance.length > 0){
             return res.status(400).send({ message: "You have already registered a freelancer" });
         }
     });

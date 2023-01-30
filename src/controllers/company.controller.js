@@ -2,9 +2,9 @@ const Company = require("../models/company.model");
 const User = require("../models/user.model");
 
 exports.register = async (req, res) => {
-    Company.find({ user: req.userToken.id }).then(company => {
-        if(company){
-            return res.status(400).send({ message: "Company already registered" });
+    await Company.find({ user: req.userToken.id }).then(company => {
+        if(company.length > 0){
+            return res.status(400).send({ message: "You have already registered a company" });
         }
     });
     const newCompany = new Company({

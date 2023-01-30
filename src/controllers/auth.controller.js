@@ -16,8 +16,13 @@ exports.register = async (req, res) => {
     });
 
     try {
+        const mail = {
+            subject: 'Welcome to our platform!',
+            text: 'Thank you for registering on our platform!',
+            html: '<h1>Welcome to Freelance</h1><p>Thank you for registering on our platform!</p>'
+        };
         const userSave = await newUser.save();
-        mailerController.sendMail(req.body.email);
+        mailerController.sendMail(req.body.email, mail, true);
         res.status(201).send({ message: "User created", userSave });
     }
     catch (err) {
