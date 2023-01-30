@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const missionSchema = mongoose.Schema({
-  timestamp: {
+  date_start: {
+    type: Date,
+    required: true,
+  },
+  date_end: {
     type: Date,
     required: true,
   },

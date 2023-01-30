@@ -6,10 +6,6 @@ const skillSchema = mongoose.Schema({
     required: true,
     lowercase: true,
   },
-},
-  {
-    timestamps: true
-  }
-);
+});
 
 module.exports = mongoose.model('Skill', skillSchema);

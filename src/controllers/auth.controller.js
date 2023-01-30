@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 var jwt = require('jsonwebtoken');
+const mailerController = require("./mailer.controller");
 
 exports.register = async (req, res) => {
     const newUser = new User({
@@ -16,6 +17,7 @@ exports.register = async (req, res) => {
 
     try {
         const userSave = await newUser.save();
+        mailerController.sendMail(req.body.email);
         res.status(201).send({ message: "User created", userSave });
     }
     catch (err) {
