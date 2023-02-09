@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 
 exports.sendMail = async (receiver, mail, isRegister) => {
 
-    const receivers = [];
+    let receivers = [];
 
     if(isRegister){
         receivers = [process.env.APP_ADMIN_EMAIL];

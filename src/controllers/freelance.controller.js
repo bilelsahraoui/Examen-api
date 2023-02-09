@@ -1,6 +1,7 @@
 const Freelance = require("../models/freelance.model");
 const User = require("../models/user.model");
 const Skill = require("../models/skill.model");
+const Job = require("../models/job.model");
 
 exports.register = async (req, res) => {
     await Freelance.find({ user: req.userToken.id }).then(freelance => {
@@ -16,6 +17,16 @@ exports.register = async (req, res) => {
             });
             newSkill.save();
             userSkills.push(newSkill._id);
+        });
+    }
+    const userJobs = [];
+    if(req.body.jobs){
+        req.body.jobs.forEach(job => {
+            const newJob = new Job({
+                name: job.name,
+            });
+            newJob.save();
+            userJobs.push(newJob._id);
         });
     }
     const newFreelance = new Freelance({

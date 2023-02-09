@@ -3,10 +3,21 @@ const Freelance = require("../models/freelance.model");
 const Mission = require("../models/mission.model");
 const mailerController = require("./mailer.controller");
 const User = require("../models/user.model");
+const Skill = require("../models/skill.model");
 
 exports.createMission = async (req, res) => {
     try {
         const companyId = await Company.findOne({user: req.userToken.id});
+        const userSkills = [];
+        if(req.body.skills){
+            req.body.skills.forEach(skill => {
+                const newSkill = new Skill({
+                    name: skill.name,
+                });
+                newSkill.save();
+                userSkills.push(newSkill._id);
+            });
+        }
         const newMission = new Mission({
             title: req.body.title,
             description: req.body.description,
@@ -16,7 +27,7 @@ exports.createMission = async (req, res) => {
             date_start: new Date(),
             // req.body.date_start,
             totalPrice: req.body.totalPrice,
-            skills: req.body.skills,
+            skills: userSkills,
             company: companyId._id,
         });
         const missionSave = await newMission.save();
@@ -39,7 +50,7 @@ exports.getAllMissions = async (req, res) => {
 
 exports.getMissionById = async (req, res) => {
     try {
-        const mission = await Mission.findById(req.params.id).populate('company');
+        const mission = await Mission.findById(req.params.id).populate('company').populate('skills').populate('freelancers');
         res.status(200).send(mission);
     }
     catch (err) {
@@ -58,7 +69,7 @@ exports.proposer = async (req, res) => {
             html: '<h1>Mission</h1></h1><p>You got a mission!</p>'
         }
 
-        if(mission.freelancers.length <= 3){
+        if(mission.freelancers.length < 3){
             if(mission.freelancers.find(freelance => freelance.freelance == freelancerId)){
                 return res.status(400).send({ message: "Freelancer already proposed" });
             }else{
@@ -97,7 +108,12 @@ exports.decide = async (req, res) => {
                         mission.freelancers = newFreelancers;
                     }
                     mission.save();
-                    mailerController.sendMail(companyUser.email, mail, false);
+                    let mailToSend = {
+                        subject: mail.subject,
+                        text: mail.text,
+                        html: mail.html + '<p>' + (req.body.isAccepted == true ? "Freelancer accepted the mission" : "Freelancer declined the mission") + '</p>'
+                    }
+                    mailerController.sendMail(companyUser.email, mailToSend, false);
                     return res.status(200).send({ message: req.body.isAccepted == true ? "Freelancer accepted the mission" : "Freelancer declined the mission" });
                 }else{
                     return res.status(400).send({ message: "You are not the freelancer" });
