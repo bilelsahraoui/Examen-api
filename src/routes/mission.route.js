@@ -11,5 +11,6 @@ router.get('/', verifyToken, missionController.getAllMissions);
 router.get('/:id', verifyToken, missionController.getMissionById);
 router.post('/proposer', verifyToken, verifyIsCompany, missionController.proposer);
 router.post('/decide', verifyToken, verifyIsFreelance, missionController.decide);
+router.delete('/delete/:id', verifyToken, verifyIsCompany, missionController.deleteMission);
 
 module.exports = router;

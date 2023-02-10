@@ -125,3 +125,59 @@ exports.decide = async (req, res) => {
         res.status(500).send({ message: err.message });
     }
 }
+
+exports.deleteMission = async (req, res) => {
+    try {
+        const companyId = await Company.findOne({user: req.userToken.id});
+        const mission = await Mission.findById(req.params.id).populate('company');
+        if (mission.company.id != companyId.id) {
+            return res.status(401).send({ message: "You are not the company owner" });
+        }else{        
+            if (!mission) {
+                return res.status(404).send({ message: "Mission not found" });
+            }
+            await mission.remove();
+            res.status(200).send({ message: "Mission deleted" });
+        }
+    }
+    catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+}
+
+exports.modifyMission = async (req, res) => {
+    try {
+        const companyId = await Company.findOne({user: req.userToken.id});
+        const mission = await Mission.findById(req.params.id).populate('company');
+        if (mission.company.id != companyId.id) {
+            return res.status(401).send({ message: "You are not the company owner" });
+        }else{        
+            if (!mission) {
+                return res.status(404).send({ message: "Mission not found" });
+            }
+            const newSkills = [];
+            if(req.body.skills){
+                req.body.skills.forEach(skill => {
+                    const newSkill = new Skill({
+                        name: skill.name,
+                    });
+                    newSkill.save();
+                    newSkills.push(newSkill._id);
+                });
+            }
+            await Mission.findByIdAndUpdate(req.params.id, {
+                title: req.body.title ? req.body.title : mission.title,
+                description: req.body.description ? req.body.description : mission.description,
+                totalPrice: req.body.totalPrice ? req.body.totalPrice : mission.totalPrice,
+                date_start: req.body.date_start ? req.body.date_start : mission.date_start,
+                date_end: req.body.date_end ? req.body.date_end : mission.date_end,
+                status: req.body.status ? req.body.status : mission.status,
+                skills: newSkills.legnt > 0 ? newSkills : mission.skills,
+            });
+            res.status(200).send({ message: "Mission updated" });
+        }
+    }
+    catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+}

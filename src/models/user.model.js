@@ -20,8 +20,8 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
     lowercase: true,
-    maxLength: 100,
-    minLength: 10
+    maxLength: 20,
+    minLength: 2
   },
   postalCode: {
     type: String,
