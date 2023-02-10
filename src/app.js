@@ -4,10 +4,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const routes = require('./routes');
+const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 app.use(bodyParser.json());
 app.use('/api/v1', routes);
+
+app.use(errorHandler);
 
 app.listen(process.env.APP_PORT, () => {
   console.log(`Server launched on port ${process.env.APP_PORT}`);

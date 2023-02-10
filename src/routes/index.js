@@ -7,6 +7,7 @@ const freelanceRouter = require('./freelance.route');
 const companyRouter = require('./company.route');
 const missionRouter = require('./mission.route');
 const searchRouter = require('./search.route');
+const adminRouter = require('./admin.route');
 
 router.use('/auth', authRouter);
 router.use('/users', userRouter);
@@ -14,5 +15,6 @@ router.use('/freelance', freelanceRouter);
 router.use('/company', companyRouter);
 router.use('/mission', missionRouter);
 router.use('/search', searchRouter);
+router.use('/admin', adminRouter);
 
 module.exports = router;
