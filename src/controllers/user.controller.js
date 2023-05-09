@@ -25,13 +25,13 @@ exports.getUserById = async (req, res) => {
 exports.modifyUser = async (req, res) => {
     try{
         const userModified = await User.findByIdAndUpdate(req.userToken.id, {
-            firstName: req.body.firstName ? req.body.firstName : userModified.firstName,
-            lastName: req.body.lastName ? req.body.lastName : userModified.lastName,
-            address: req.body.address ? req.body.address : userModified.address,
-            postalCode: req.body.postalCode ? req.body.postalCode : userModified.postalCode,
-            phone: req.body.phone ? req.body.phone : userModified.phone,
-            email: req.body.email ? req.body.email : userModified.email,
-            password: req.body.password ? req.body.password : userModified.password,
+            firstName: req.body.firstName ? req.body.firstName : User.firstName,
+            lastName: req.body.lastName ? req.body.lastName : User.lastName,
+            address: req.body.address ? req.body.address : User.address,
+            postalCode: req.body.postalCode ? req.body.postalCode : User.postalCode,
+            phone: req.body.phone ? req.body.phone : User.phone,
+            email: req.body.email ? req.body.email : User.email,
+            password: req.body.password ? req.body.password : User.password,
         });
         userModified.save();
         res.status(200).send(userModified);
@@ -69,6 +69,15 @@ exports.forgotPassword = async (req, res) => {
             user.save();
             res.status(200).send({ message: "New password sent to your email" });
         }
+    }catch(err){
+        res.status(500).send({ message: err.message });
+    }
+}
+
+exports.deleteUser = async (req, res) => {
+    try{
+        const user = await User.findByIdAndDelete(req.params.id);
+        res.status(200).send({ message: "User deleted", user });
     }catch(err){
         res.status(500).send({ message: err.message });
     }

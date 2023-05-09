@@ -31,6 +31,7 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+    const resUser = await User.findOne({ email: req.body.email }).populate('freelance').populate('company');
     User.findOne({ email: req.body.email})
         .then(user => {
             if (!user) {
@@ -43,7 +44,7 @@ exports.login = async (req, res) => {
             }
 
             let token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET)
-            res.status(200).send({ message: "Successfuly logged in", auth: true, token: token });
+            res.status(200).send({ message: "Successfuly logged in", auth: true, token: token, user: resUser });
         })
         .catch(err => {
             res.status(500).send({ message: err.message });

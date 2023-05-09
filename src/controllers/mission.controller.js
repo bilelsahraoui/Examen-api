@@ -58,6 +58,28 @@ exports.getMissionById = async (req, res) => {
     }
 }
 
+exports.getMissionByFreelancer = async (req, res) => {
+    try {
+        const missions = await Mission.find().populate('company').populate('skills').populate('freelancers');
+        const freelancerMission = missions.filter(mission => mission.freelancers.find(freelanceObj => freelanceObj.freelance == req.params.id));
+        res.status(200).send(freelancerMission);
+    }
+    catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+}
+
+exports.getMissionByCompany = async (req, res) => {
+    try {
+        const company = await Company.findOne({user: req.params.id});
+        const missions = await Mission.find({company: company._id}).populate('company').populate('skills').populate('freelancers');
+        res.status(200).send(missions);
+    }
+    catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+}
+
 exports.proposer = async (req, res) => {
     try {
         const freelancerId = req.body.freelancerId;
@@ -172,7 +194,7 @@ exports.modifyMission = async (req, res) => {
                 date_start: req.body.date_start ? req.body.date_start : mission.date_start,
                 date_end: req.body.date_end ? req.body.date_end : mission.date_end,
                 status: req.body.status ? req.body.status : mission.status,
-                skills: newSkills.legnt > 0 ? newSkills : mission.skills,
+                skills: newSkills.length > 0 ? newSkills : mission.skills,
             });
             res.status(200).send({ message: "Mission updated" });
         }

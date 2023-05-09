@@ -57,8 +57,6 @@ exports.searchByString = async (req, res) => {
         const searchString = req.body.searchString;
         const freelancers = await Freelancer.find().populate('user').populate('skills').populate('jobs');
 
-        // const arr = searchString.split(' ');
-
         const finalResults = freelancers.filter(freelancer => {
             const skills = freelancer.skills.map(skill => skill.name);
             const jobs = freelancer.jobs.map(job => job.name);

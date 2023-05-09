@@ -34,7 +34,7 @@ exports.register = async (req, res) => {
         yearsOfExperience: req.body.yearsOfExperience,
         user: req.userToken.id,
         skills: userSkills,
-        jobs: req.body.jobs,
+        jobs: userJobs,
     });
 
     try {

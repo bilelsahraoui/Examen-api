@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 require('dotenv').config();
+const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -8,6 +9,7 @@ const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 app.use('/api/v1', routes);
 
 app.use(errorHandler);
